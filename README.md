@@ -1,6 +1,7 @@
 # baatcheet
-
+A messaging application for Ethos 24
 A new Flutter project.
+A new Firebase project.
 
 ## Getting Started
 
