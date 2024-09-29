@@ -1,10 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+import 'dart:io';
+import 'package:baatcheet/Components/dialogs.dart';
 import 'package:baatcheet/Pages/homepage.dart';
 import 'package:baatcheet/Pages/welcome.dart';
 import 'package:baatcheet/Components/square_tiles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -19,6 +24,74 @@ class SignInState extends State<SignIn> {
   static const String usernameKey = 'Username';
   static const String passwordKey = 'Password';
   void goToHome() {}
+  _googleButton() {
+    Dialogs.loading(context);
+    _signInWithGoogle().then(
+      (user) {
+        Navigator.pop(context);
+        
+        if (user != null) {
+          log('\nUser: ${user.user}');
+          log('\n   UserAdditionalInfo: ${user.additionalUserInfo}');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MyHome(),
+            ),
+          );
+        }
+        ;
+      },
+    );
+  }
+
+  _githubButton() {
+    _signInWithGitHub().then(
+      (user) {
+        log('\nUser: ${user.user}');
+        log('\nUserAdditionalInfo: ${user.additionalUserInfo}');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MyHome(),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<UserCredential?> _signInWithGoogle() async {
+    try {
+      await InternetAddress.lookup('google.com');
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      log('\n_signInWithGoogle: $e');
+      Dialogs.showSnackBar(context, 'Oops! looks like you\'re offline');
+      return null;
+    }
+  }
+
+  Future<UserCredential> _signInWithGitHub() async {
+    // Create a new provider
+    GithubAuthProvider githubProvider = GithubAuthProvider();
+
+    return await FirebaseAuth.instance.signInWithProvider(githubProvider);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,9 +100,9 @@ class SignInState extends State<SignIn> {
           begin: Alignment.topCenter,
           end: Alignment(0.8, 1),
           colors: <Color>[
-             Color(0x00000000),
-             Color.fromARGB(255, 21, 135, 152),
-             Color(0x001D1639),
+            Color(0x00000000),
+            Color.fromARGB(255, 21, 135, 152),
+            Color(0x001D1639),
           ], // Gradient from https://learnui.design/tools/gradient-generator.html
           tileMode: TileMode.clamp,
         ),
@@ -57,7 +130,9 @@ class SignInState extends State<SignIn> {
                   const Text(
                     'Welcome!',
                     style: TextStyle(
-                        fontFamily: 'kalam', fontSize: 18, color: Color.fromARGB(255, 226, 226, 230)),
+                        fontFamily: 'kalam',
+                        fontSize: 18,
+                        color: Color.fromARGB(255, 226, 226, 230)),
                   ),
                   const SizedBox(
                     height: 15,
@@ -65,7 +140,9 @@ class SignInState extends State<SignIn> {
                   const Text(
                     'Let\'s get started by signing in first.',
                     style: TextStyle(
-                        fontFamily: 'kalam', fontSize: 18, color: Color.fromARGB(255, 230, 233, 236)),
+                        fontFamily: 'kalam',
+                        fontSize: 18,
+                        color: Color.fromARGB(255, 230, 233, 236)),
                   ),
                   const SizedBox(
                     height: 20,
@@ -178,7 +255,7 @@ class SignInState extends State<SignIn> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       NeumorphicButton(
-                        onPressed: () => goToHome(),
+                        onPressed: () => _googleButton(),
                         style: const NeumorphicStyle(
                             depth: 2,
                             lightSource: LightSource.bottomRight,
@@ -190,13 +267,14 @@ class SignInState extends State<SignIn> {
                         width: 30,
                       ),
                       NeumorphicButton(
-                          onPressed: () => goToHome(),
-                          style: const NeumorphicStyle(
-                              depth: 2,
-                              lightSource: LightSource.bottomRight,
-                              shadowLightColor: Colors.cyanAccent),
-                          child: const SquareTile1(
-                              imagePath: 'lib/Images/Apple.jpg')),
+                        onPressed: () => _githubButton(),
+                        style: const NeumorphicStyle(
+                            depth: 2,
+                            lightSource: LightSource.bottomRight,
+                            shadowLightColor: Colors.cyanAccent),
+                        child: const SquareTile1(
+                            imagePath: 'lib/Images/github.png'),
+                      ),
                     ],
                   ),
                   const SizedBox(

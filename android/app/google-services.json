@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "459093801872",
+    "project_id": "ethos24-91898",
+    "storage_bucket": "ethos24-91898.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459093801872:android:51db6be44b8768a3505115",
+        "android_client_info": {
+          "package_name": "com.example.baatcheet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "459093801872-sei4b4c3rm62r15fh0g1q49urpe7durl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.baatcheet",
+            "certificate_hash": "8bb7a1b2d67600447509590fa1b34c38d32fc8bc"
+          }
+        },
+        {
+          "client_id": "459093801872-glgv9a4ngf59iv6vlogin7m56ffsa2hg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfs3T_85LKytakfeFJ5oriH3lnYgV7CZ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "459093801872-glgv9a4ngf59iv6vlogin7m56ffsa2hg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "459093801872-5eb2lraajsce6ik73ni60o3isvcp0kak.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.baatcheet"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -40,6 +40,11 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   motion_tab_bar: ^2.0.4
   sidebarx: ^0.17.1
+  firebase_auth: ^4.17.8
+  firebase_core: ^2.27.0
+  firebase_messaging: ^14.7.19
+  google_sign_in: ^6.2.1
+
   
 
 dev_dependencies:
