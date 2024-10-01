@@ -15,7 +15,7 @@ class Dialogs {
     showDialog(
       context: context,
       builder: (_) => const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(color: Colors.cyan,),
       ),
     );
   }

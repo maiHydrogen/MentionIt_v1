@@ -42,8 +42,10 @@ dependencies:
   sidebarx: ^0.17.1
   firebase_auth: ^4.17.8
   firebase_core: ^2.27.0
+  cloud_firestore: ^4.15.8
   firebase_messaging: ^14.7.19
   google_sign_in: ^6.2.1
+  github_sign_in_plus: ^0.0.1
 
   
 
@@ -71,7 +73,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-     - lib/images/
+     - Images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

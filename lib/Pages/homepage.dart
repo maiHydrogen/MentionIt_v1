@@ -2,8 +2,10 @@ import 'package:baatcheet/Pages/calls.dart';
 import 'package:baatcheet/Pages/chats.dart';
 import 'package:baatcheet/Pages/newchats.dart';
 import 'package:baatcheet/Pages/settings.dart';
-import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
+import 'package:baatcheet/api/api.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:motion_tab_bar/MotionTabBarController.dart';
 import 'package:baatcheet/Pages/sign_in.dart';
@@ -81,7 +83,11 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
               // }
               _key.currentState?.openDrawer();
             },
-            icon: const Icon(Icons.menu, color: Colors.cyanAccent, size: 30,),
+            icon: const Icon(
+              FontAwesomeIcons.bars,
+              color: Colors.cyanAccent,
+              size: 30,
+            ),
           ),
           actions: [
             Container(
@@ -147,7 +153,6 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
               icon: FontAwesomeIcons.user,
               label: 'My Account',
             ),
-            SidebarXItem(icon: Icons.search, label: 'Search'),
           ],
           footerItems: [
             SidebarXItem(
@@ -156,6 +161,8 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
               onTap: () async {
                 var shacyanPref = await SharedPreferences.getInstance();
                 shacyanPref.setBool(WelcomepageState.keylogin, false);
+                await APIs.auth.signOut();
+                await GoogleSignIn().signOut();
                 // ignore: use_build_context_synchronously
                 Navigator.pushReplacement(
                   context,
@@ -216,10 +223,9 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           ],
           footerItems: [
             SidebarXItem(
-              icon: FontAwesomeIcons.solidTrashCan,
-              label: 'Clear All',
-              onTap: () => goToNome()
-            ),
+                icon: FontAwesomeIcons.solidTrashCan,
+                label: 'Clear All',
+                onTap: () => goToNome()),
           ],
         ),
         bottomNavigationBar: MotionTabBar(
@@ -228,9 +234,9 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           useSafeArea: true,
           labels: const ["Chats", "New Chat", "Calls", "Settings"],
           icons: const [
-            Icons.chat_rounded,
-            Icons.add_comment_rounded,
-            Icons.call,
+            FontAwesomeIcons.message,
+            FontAwesomeIcons.penToSquare,
+            FontAwesomeIcons.phone,
             FontAwesomeIcons.gear
           ],
           textStyle: const TextStyle(

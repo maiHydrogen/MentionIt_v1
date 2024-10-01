@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
+import 'package:baatcheet/api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:baatcheet/pages/homepage.dart';
 import 'package:baatcheet/pages/sign_in.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Welcomepage extends StatefulWidget {
@@ -27,7 +30,7 @@ class WelcomepageState extends State<Welcomepage> {
       body: Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("lib/Images/SplashBC.jpg"),
+            image: AssetImage('Images/SplashBC5.jpg'),
             fit: BoxFit.fill,
           ),
         ),
@@ -77,7 +80,18 @@ class WelcomepageState extends State<Welcomepage> {
     Timer(
       const Duration(seconds: 3),
       () {
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        SystemChrome.setSystemUIOverlayStyle(
+            const SystemUiOverlayStyle(statusBarColor: Colors.transparent)
+        );
         if (isLoggedIn != null) {
+          if(APIs.auth.currentUser != null){
+            log('\nUser: ${APIs.auth.currentUser}');
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MyHome()),
+            );
+          }
           if (isLoggedIn) {
             Navigator.pushReplacement(
               context,

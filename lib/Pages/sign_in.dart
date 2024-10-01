@@ -1,15 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 import 'dart:io';
 import 'package:baatcheet/Components/dialogs.dart';
 import 'package:baatcheet/Pages/homepage.dart';
 import 'package:baatcheet/Pages/welcome.dart';
 import 'package:baatcheet/Components/square_tiles.dart';
+import 'package:baatcheet/api/api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../Components/textfields.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -27,20 +29,32 @@ class SignInState extends State<SignIn> {
   _googleButton() {
     Dialogs.loading(context);
     _signInWithGoogle().then(
-      (user) {
+      (user) async {
         Navigator.pop(context);
-        
+
         if (user != null) {
           log('\nUser: ${user.user}');
-          log('\n   UserAdditionalInfo: ${user.additionalUserInfo}');
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MyHome(),
-            ),
-          );
+          log('\nUserAdditionalInfo: ${user.additionalUserInfo}');
+          if ((await APIs.userExists())) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MyHome(),
+              ),
+            );
+          } else {
+            await APIs.createUser().then(
+              (value) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MyHome(),
+                  ),
+                );
+              },
+            );
+          }
         }
-        ;
       },
     );
   }
@@ -80,7 +94,7 @@ class SignInState extends State<SignIn> {
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
       log('\n_signInWithGoogle: $e');
-      Dialogs.showSnackBar(context, 'Oops! looks like you\'re offline');
+      Dialogs.showSnackBar(context, 'Oops! Something went wrong.');
       return null;
     }
   }
@@ -89,7 +103,7 @@ class SignInState extends State<SignIn> {
     // Create a new provider
     GithubAuthProvider githubProvider = GithubAuthProvider();
 
-    return await FirebaseAuth.instance.signInWithProvider(githubProvider);
+    return await APIs.auth.signInWithProvider(githubProvider);
   }
 
   @override
@@ -114,12 +128,9 @@ class SignInState extends State<SignIn> {
             child: Center(
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 60),
                   const Icon(
-                    Icons.lock_person,
+                    FontAwesomeIcons.userLock,
                     size: 80,
                     color: Color.fromARGB(255, 225, 225, 230),
                   ),
@@ -260,8 +271,8 @@ class SignInState extends State<SignIn> {
                             depth: 2,
                             lightSource: LightSource.bottomRight,
                             shadowLightColor: Colors.cyanAccent),
-                        child: const SquareTile1(
-                            imagePath: 'lib/Images/Google.jpg'),
+                        child:
+                            const SquareTile1(imagePath: 'Images/Google.jpg'),
                       ),
                       const SizedBox(
                         width: 30,
@@ -272,8 +283,8 @@ class SignInState extends State<SignIn> {
                             depth: 2,
                             lightSource: LightSource.bottomRight,
                             shadowLightColor: Colors.cyanAccent),
-                        child: const SquareTile1(
-                            imagePath: 'lib/Images/github.png'),
+                        child:
+                            const SquareTile1(imagePath: 'Images/github.png'),
                       ),
                     ],
                   ),
@@ -309,56 +320,6 @@ class SignInState extends State<SignIn> {
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class MyTextField extends StatelessWidget {
-  // ignore: prefer_typing_uninitialized_variables
-  final controller;
-  final String hintText;
-  final bool obscureText;
-
-  const MyTextField({
-    super.key,
-    required this.controller,
-    required this.hintText,
-    required this.obscureText,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-            borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(10),
-              right: Radius.circular(10),
-            ),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.cyan),
-            borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(10),
-              right: Radius.circular(10),
-            ),
-          ),
-          fillColor: Colors.grey[400],
-          filled: true,
-          hintText: hintText,
-          hintStyle: TextStyle(
-              color: Colors.grey[700],
-              fontFamily: 'instrument_serif',
-              wordSpacing: 5,
-              fontWeight: FontWeight.w600,
-              fontSize: 16),
         ),
       ),
     );
