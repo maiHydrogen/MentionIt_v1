@@ -3,7 +3,7 @@ A real-time messaging application for Ethos 24.
 A new Flutter project.
 A new Firebase project.
 
-##✨ Features:
+✨ Features:
 
 Display only known users or contacts.
 Real-time messaging (with Firebase).
