@@ -1,18 +1,22 @@
-# baatcheet
-A messaging application for Ethos 24
-A new Flutter project.
-A new Firebase project.
+# Mention It
+- A real-time messaging application for Ethos 24.
+- A new Flutter project.
+- A new Firebase project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## ✨ Features:
 
-A few resources to get you started if this is your first Flutter project:
+- Display only known users or contacts.
+- Real-time messaging (with Firebase).
+- Login with Email Id and password.
+- Google Sign-In (no account or mobile number needed).
+- Add users by email ID.
+- Simple user profiles (with photo, about, last-seen, created-at).
+- Message read status.
+- Message delete & edit features.
+- Message notifications (push notifications).
+- Sleek UI with new Material Widgets.
+- **And much more...**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
 # Ethos24
