@@ -4,7 +4,7 @@ A new Flutter project.
 A new Firebase project.
 
 
-✨ Features:
+# baatcheet
 Display only known users or contacts.
 Real-time messaging (with Firebase).
 Google Sign-In (no account or mobile number needed).
