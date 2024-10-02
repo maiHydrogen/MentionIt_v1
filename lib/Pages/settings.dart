@@ -1,4 +1,5 @@
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:motion_tab_bar/MotionTabBarController.dart';
 
 
@@ -44,7 +45,7 @@ class __MySettingsState extends State<MySettings> {
                   height: 30,
                 ),
                 Icon(
-                  Icons.construction_outlined,
+                  FontAwesomeIcons.circleExclamation,
                   color: Colors.white,
                   size: 100,
                 ),

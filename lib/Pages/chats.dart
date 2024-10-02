@@ -1,6 +1,6 @@
-import 'package:baatcheet/Components/chatusercard.dart';
-import 'package:baatcheet/api/api.dart';
-import 'package:baatcheet/models/chatuser.dart';
+import 'package:mention_it/Components/chatusercard.dart';
+import 'package:mention_it/api/api.dart';
+import 'package:mention_it/models/chatuser.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:motion_tab_bar/MotionTabBarController.dart';
@@ -26,8 +26,8 @@ class __MyChatsState extends State<MyChats> {
           SliverAppBar(
             backgroundColor: Colors.transparent,
             actions: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+
+              Center(
                 child: Container(
                   decoration: BoxDecoration(
                     backgroundBlendMode: BlendMode.src,
@@ -49,9 +49,6 @@ class __MyChatsState extends State<MyChats> {
                   height: 50,
                   child: const Row(
                     children: [
-                      SizedBox(
-                        width: 10,
-                      ),
                       Icon(
                         FontAwesomeIcons.magnifyingGlass,
                         color: Colors.white,

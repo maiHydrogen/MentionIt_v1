@@ -1,16 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:developer';
 import 'dart:io';
-import 'package:baatcheet/Components/dialogs.dart';
-import 'package:baatcheet/Pages/homepage.dart';
-import 'package:baatcheet/Pages/welcome.dart';
-import 'package:baatcheet/Components/square_tiles.dart';
-import 'package:baatcheet/api/api.dart';
+import 'package:mention_it/Components/dialogs.dart';
+import 'package:mention_it/Pages/homepage.dart';
+import 'package:mention_it/Pages/sign_up.dart';
+import 'package:mention_it/Components/square_tiles.dart';
+import 'package:mention_it/Pages/welcome.dart';
+import 'package:mention_it/api/api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Components/textfields.dart';
 
 class SignIn extends StatefulWidget {
@@ -21,11 +22,21 @@ class SignIn extends StatefulWidget {
 }
 
 class SignInState extends State<SignIn> {
-  final username = TextEditingController();
-  final password = TextEditingController();
-  static const String usernameKey = 'Username';
-  static const String passwordKey = 'Password';
-  void goToHome() {}
+  bool _isSigning = false;
+  final FirebaseAuthService _auth = FirebaseAuthService();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+
+  // Google SignIn
   _googleButton() {
     Dialogs.loading(context);
     _signInWithGoogle().then(
@@ -58,22 +69,6 @@ class SignInState extends State<SignIn> {
       },
     );
   }
-
-  _githubButton() {
-    _signInWithGitHub().then(
-      (user) {
-        log('\nUser: ${user.user}');
-        log('\nUserAdditionalInfo: ${user.additionalUserInfo}');
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MyHome(),
-          ),
-        );
-      },
-    );
-  }
-
   Future<UserCredential?> _signInWithGoogle() async {
     try {
       await InternetAddress.lookup('google.com');
@@ -97,13 +92,6 @@ class SignInState extends State<SignIn> {
       Dialogs.showSnackBar(context, 'Oops! Something went wrong.');
       return null;
     }
-  }
-
-  Future<UserCredential> _signInWithGitHub() async {
-    // Create a new provider
-    GithubAuthProvider githubProvider = GithubAuthProvider();
-
-    return await APIs.auth.signInWithProvider(githubProvider);
   }
 
   @override
@@ -159,34 +147,33 @@ class SignInState extends State<SignIn> {
                     height: 20,
                   ),
                   SizedBox(
-                    height: 150,
-                    width: 350,
+                    width: MediaQuery.of(context).size.width*0.9,
                     child: Column(
                       children: [
                         const SizedBox(
                           height: 10,
                         ),
                         MyTextField(
-                            controller: username,
-                            hintText: 'Username or Email',
+                            controller: _emailController,
+                            hintText: 'Email address',
                             obscureText: false),
                         const SizedBox(
                           height: 10,
                         ),
                         MyTextField(
-                            controller: password,
+                            controller: _passwordController,
                             hintText: 'Password',
                             obscureText: true),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 25, bottom: 10),
+                    padding: const EdgeInsets.only(right: 25),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
-                          onPressed: () => goToHome(),
+                          onPressed: () => (){},
                           child: const Text(
                             'Forgot Password?',
                             style: TextStyle(
@@ -199,19 +186,11 @@ class SignInState extends State<SignIn> {
                     ),
                   ),
                   NeumorphicButton(
-                    onPressed: () async {
-                      var sharedPref = await SharedPreferences.getInstance();
+                    onPressed: ()async{
+                      _signIn();
+                     var sharedPref = await SharedPreferences.getInstance();
                       sharedPref.setBool(WelcomepageState.keylogin, true);
                       var pref = await SharedPreferences.getInstance();
-                      pref.setString(usernameKey, username.text.toString());
-                      pref.setString(passwordKey, password.text.toString());
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MyHome(),
-                        ),
-                      );
                     },
                     style: const NeumorphicStyle(
                         depth: 2,
@@ -262,31 +241,14 @@ class SignInState extends State<SignIn> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      NeumorphicButton(
-                        onPressed: () => _googleButton(),
-                        style: const NeumorphicStyle(
-                            depth: 2,
-                            lightSource: LightSource.bottomRight,
-                            shadowLightColor: Colors.cyanAccent),
-                        child:
-                            const SquareTile1(imagePath: 'Images/Google.jpg'),
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      NeumorphicButton(
-                        onPressed: () => _githubButton(),
-                        style: const NeumorphicStyle(
-                            depth: 2,
-                            lightSource: LightSource.bottomRight,
-                            shadowLightColor: Colors.cyanAccent),
-                        child:
-                            const SquareTile1(imagePath: 'Images/github.png'),
-                      ),
-                    ],
+                  NeumorphicButton(
+                    onPressed: () => _googleButton(),
+                    style: const NeumorphicStyle(
+                        depth: 2,
+                        lightSource: LightSource.bottomRight,
+                        shadowLightColor: Colors.cyanAccent),
+                    child:
+                        const SquareTile1(imagePath: 'Images/google-logo.png'),
                   ),
                   const SizedBox(
                     height: 20,
@@ -305,7 +267,10 @@ class SignInState extends State<SignIn> {
                         width: 10,
                       ),
                       TextButton(
-                        onPressed: () => goToHome(),
+                        onPressed: () =>  Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SignUpPage()),
+                        ),
                         child: const Text(
                           'Register Now ',
                           style: TextStyle(
@@ -324,4 +289,29 @@ class SignInState extends State<SignIn> {
       ),
     );
   }
+  void _signIn() async {
+    setState(() {
+      _isSigning = true;
+    });
+
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    User? user = await _auth.signInWithEmailAndPassword(email, password);
+
+    setState(() {
+      _isSigning = false;
+    });
+
+    if (user != null) {
+      Dialogs.showSnackBar(context, "User is successfully signed in");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MyHome()),
+      );
+    } else {
+      Dialogs.showSnackBar(context,"some error occured");
+    }
+  }
+
 }

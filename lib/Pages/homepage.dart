@@ -1,17 +1,14 @@
-import 'package:baatcheet/Pages/calls.dart';
-import 'package:baatcheet/Pages/chats.dart';
-import 'package:baatcheet/Pages/newchats.dart';
-import 'package:baatcheet/Pages/settings.dart';
-import 'package:baatcheet/api/api.dart';
+import 'package:mention_it/Pages/calls.dart';
+import 'package:mention_it/Pages/chats.dart';
+import 'package:mention_it/Pages/newchats.dart';
+import 'package:mention_it/Pages/profile.dart';
+import 'package:mention_it/Pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:motion_tab_bar/MotionTabBarController.dart';
-import 'package:baatcheet/Pages/sign_in.dart';
-import 'package:baatcheet/Pages/welcome.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sidebarx/sidebarx.dart';
+
+import 'notification.dart';
 
 class MyHome extends StatefulWidget {
   const MyHome({super.key});
@@ -107,127 +104,8 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
             ),
           ],
         ),
-        drawer: SidebarX(
-          theme: const SidebarXTheme(
-              decoration: BoxDecoration(
-                backgroundBlendMode: BlendMode.src,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment(0.8, 1),
-                  colors: <Color>[
-                    Color(0x00000000),
-                    Color.fromARGB(255, 21, 135, 152),
-                    Color(0x001D1639),
-                  ], // Gradient from https://learnui.design/tools/gradient-generator.html
-                  tileMode: TileMode.mirror,
-                ),
-              ),
-              width: 200,
-              textStyle: TextStyle(
-                fontFamily: 'kalam',
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.cyanAccent,
-              ),
-              iconTheme: IconThemeData(color: Colors.cyanAccent),
-              itemTextPadding: EdgeInsets.only(left: 10, top: 8),
-              selectedIconTheme: IconThemeData(color: Colors.white),
-              selectedTextStyle: TextStyle(
-                fontFamily: 'kalam',
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
-              selectedItemTextPadding: EdgeInsets.only(left: 10, top: 8),
-              hoverIconTheme: IconThemeData(color: Colors.white),
-              hoverTextStyle: TextStyle(
-                fontFamily: 'kalam',
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
-              hoverColor: Colors.black),
-          controller: SidebarXController(selectedIndex: 0, extended: true),
-          items: const [
-            SidebarXItem(
-              icon: FontAwesomeIcons.user,
-              label: 'My Account',
-            ),
-          ],
-          footerItems: [
-            SidebarXItem(
-              icon: FontAwesomeIcons.arrowRightFromBracket,
-              label: 'logout',
-              onTap: () async {
-                var shacyanPref = await SharedPreferences.getInstance();
-                shacyanPref.setBool(WelcomepageState.keylogin, false);
-                await APIs.auth.signOut();
-                await GoogleSignIn().signOut();
-                // ignore: use_build_context_synchronously
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SignIn(),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-        endDrawer: SidebarX(
-          theme: const SidebarXTheme(
-              decoration: BoxDecoration(
-                backgroundBlendMode: BlendMode.src,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment(0.8, 1),
-                  colors: <Color>[
-                    Color(0x00000000),
-                    Color.fromARGB(255, 21, 135, 152),
-                    Color(0x001D1639),
-                  ], // Gradient from https://learnui.design/tools/gradient-generator.html
-                  tileMode: TileMode.mirror,
-                ),
-              ),
-              width: 200,
-              textStyle: TextStyle(
-                fontFamily: 'kalam',
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.cyanAccent,
-              ),
-              iconTheme: IconThemeData(color: Colors.cyanAccent),
-              itemTextPadding: EdgeInsets.only(left: 10, top: 8),
-              selectedIconTheme: IconThemeData(color: Colors.white),
-              selectedTextStyle: TextStyle(
-                fontFamily: 'kalam',
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
-              selectedItemTextPadding: EdgeInsets.only(left: 10, top: 8),
-              hoverIconTheme: IconThemeData(color: Colors.white),
-              hoverTextStyle: TextStyle(
-                fontFamily: 'kalam',
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
-              hoverColor: Colors.black),
-          controller: SidebarXController(selectedIndex: 0, extended: true),
-          items: const [
-            SidebarXItem(
-              icon: FontAwesomeIcons.bell,
-              label: 'Notifcations',
-            ),
-          ],
-          footerItems: [
-            SidebarXItem(
-                icon: FontAwesomeIcons.solidTrashCan,
-                label: 'Clear All',
-                onTap: () => goToNome()),
-          ],
-        ),
+        drawer: const UserProfile(),
+        endDrawer: const Notifications(),
         bottomNavigationBar: MotionTabBar(
           controller: _motionTabBarController,
           initialSelectedTab: "Chats",

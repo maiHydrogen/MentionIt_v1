@@ -34,7 +34,7 @@ class MyTextField extends StatelessWidget {
               right: Radius.circular(10),
             ),
           ),
-          fillColor: Colors.grey[400],
+          fillColor: Colors.white,
           filled: true,
           hintText: hintText,
           hintStyle: TextStyle(
