@@ -11,10 +11,10 @@ class MyChats extends StatefulWidget {
   final MotionTabBarController controller;
 
   @override
-  State<MyChats> createState() => __MyChatsState();
+  State<MyChats> createState() => MyChatsState();
 }
 
-class __MyChatsState extends State<MyChats> {
+class MyChatsState extends State<MyChats> {
   List<ChatUser> list = [];
   @override
   Widget build(BuildContext context) {

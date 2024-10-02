@@ -104,7 +104,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
             ),
           ],
         ),
-        drawer: const UserProfile(),
+        drawer: UserProfile(),
         endDrawer: const Notifications(),
         bottomNavigationBar: MotionTabBar(
           controller: _motionTabBarController,
